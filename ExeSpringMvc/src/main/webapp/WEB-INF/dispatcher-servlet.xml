@@ -1,0 +1,65 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/data/jpa 
+http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+	<context:component-scan
+		base-package="com.phuoctam.controller" />
+	<context:component-scan
+		base-package="com.phuoctam.services" />
+	<context:component-scan
+		base-package="com.phuoctam.services.ipml" />
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix">
+			<value>/WEB-INF/views/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	</bean>
+
+	<jpa:repositories
+		base-package="com.phuoctam.repositories" />
+
+	<bean
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		id="dataSource">
+		<property name="driverClassName"
+			value="org.postgresql.Driver" />
+		<property name="url"
+			value="jdbc:postgresql://localhost:5432/demojpa" />
+		<property name="username" value="postgres" />
+		<property name="password" value="root" />
+	</bean>
+
+	<beans:bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<beans:property name="dataSource" ref="dataSource" />
+		<beans:property name="packagesToScan"
+			value="com.phuoctam.*" />
+		<beans:property name="jpaVendorAdapter">
+			<beans:bean
+				class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<beans:property name="generateDdl" value="true" />
+			</beans:bean>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="transactionManager"
+		class="org.springframework.orm.jpa.JpaTransactionManager">
+		<beans:property name="entityManagerFactory"
+			ref="entityManagerFactory" />
+	</beans:bean>
+
+</beans>
